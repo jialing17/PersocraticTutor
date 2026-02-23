@@ -74,14 +74,12 @@ if st.sidebar.button("Logout"):
 
 st.title("Socratic PersonaTutor")
 
-for msg in st.session_state.messages:
-    if msg["role"] in ["assistant"]:
-        role = "assistant"
-    else:
-        role = "user"
-        
-    with st.chat_message(role):
-        st.markdown(msg["content"])
+if st.session_state.messages:
+    st.subheader("Chat History")
+    for msg in st.session_state.messages:
+        role = msg.get("role", "user")
+        with st.chat_message(role):
+            st.markdown(msg["content"])
 
 # User Chat Input
 if prompt := st.chat_input("Enter your question here..."):

@@ -60,9 +60,13 @@ def verify_user(username, password):
 def get_chat_history(username):
     resp = query_turso("SELECT role, content FROM history WHERE username=? ORDER BY turn_id ASC", [username])
     try:
+        if resp is None:
+            print(f"Database connection failed for user {username}")
+            return []
         rows = resp["results"][0]["response"]["result"]["rows"]
         return [{"role": row[0]["value"], "content": row[1]["value"]} for row in rows]
-    except:
+    except Exception as e:
+        print(f"Error loading chat history for {username}: {e}")
         return []
 
 def create_user(username, password):
