@@ -22,7 +22,7 @@ if "username" not in st.session_state:
 
 # login logic
 if st.session_state.username is None:
-    st.title("🎓 PersonaTutor")
+    st.title("🎓 Persocratic Tutor")
     st.info("Please login or sign up to continue.")
     
     tab1, tab2 = st.tabs(["Login", "Sign Up"])
@@ -75,7 +75,7 @@ if st.sidebar.button("Logout"):
     st.session_state.messages = []
     st.rerun()
 
-st.title("Socratic PersonaTutor")
+st.title("Persocratic Tutor")
 
 if st.session_state.messages:
     # st.subheader("Chat History")
@@ -88,7 +88,7 @@ if st.session_state.messages:
 if prompt := st.chat_input("Enter your question here..."):
     st.chat_message("user").markdown(prompt)
     
-    with st.spinner("PersonaTutor is thinking..."):
+    with st.spinner("Persocratic Tutor is thinking..."):
         try:
             resultQU = qu_agent.analyze_student_input(prompt, history=st.session_state.messages)
             
