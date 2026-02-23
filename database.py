@@ -59,18 +59,21 @@ def verify_user(username, password):
 
 def get_chat_history(username):
     resp = query_turso("SELECT role, content FROM history WHERE username=? ORDER BY turn_id ASC", [username])
+    print(f"[HISTORY DEBUG] resp type: {type(resp)}")
+    print(f"[HISTORY DEBUG] resp is None: {resp is None}")
+    print(f"[HISTORY DEBUG] Full response: {resp}")
+    
     try:
         if resp is None:
             print(f"[HISTORY DEBUG] Database connection failed for user {username}")
             return []
         
-        print(f"[HISTORY DEBUG] Full response: {resp}")
         rows = resp["results"][0]["response"]["result"]["rows"]
         history_list = [{"role": row[0]["value"], "content": row[1]["value"]} for row in rows]
-        print(f"[HISTORY DEBUG] Loaded {len(history_list)} messages for {username}")
+        print(f"[HISTORY DEBUG] Successfully loaded {len(history_list)} messages for {username}")
         return history_list
     except Exception as e:
-        print(f"[HISTORY DEBUG] Error loading chat history for {username}: {e}")
+        print(f"[HISTORY DEBUG] ERROR: {type(e).__name__}: {e}")
         import traceback
         traceback.print_exc()
         return []
