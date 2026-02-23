@@ -64,7 +64,7 @@ def get_chat_history(username):
             print(f"[HISTORY DEBUG] Database connection failed for user {username}")
             return []
         
-        print(f"[HISTORY DEBUG] Database response: {resp}")
+        print(f"[HISTORY DEBUG] Full response: {resp}")
         rows = resp["results"][0]["response"]["result"]["rows"]
         history_list = [{"role": row[0]["value"], "content": row[1]["value"]} for row in rows]
         print(f"[HISTORY DEBUG] Loaded {len(history_list)} messages for {username}")
