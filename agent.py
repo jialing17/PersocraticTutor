@@ -280,7 +280,7 @@ class QuestionGenerationAgent:
 
         user_content = f"""
         CORE_ISSUE: "{core_issue}"
-        PEDAGOGICAL_MODE: "{strategy_type}"
+        STRATEGY_TYPE: "{strategy_type}"
         INSTRUCTIONAL_STYLE: "{instructional_style}"
         STRATEGY_STEPS: {strategy_steps}
         REFERENCE_TEXT: \"\"\"{context}\"\"\"
