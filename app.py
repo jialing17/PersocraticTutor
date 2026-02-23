@@ -56,11 +56,11 @@ if st.session_state.username is None:
     st.stop()
 
 if "messages" not in st.session_state:
-    st.write(f"[APP DEBUG] Username: {st.session_state.username}")
+    # st.write(f"[APP DEBUG] Username: {st.session_state.username}")
     history = get_chat_history(st.session_state.username)
-    st.write(f"[APP DEBUG] get_chat_history returned: {history}")
+    # st.write(f"[APP DEBUG] get_chat_history returned: {history}")
     st.session_state.messages = history if history is not None else []
-    st.write(f"DEBUG: Loaded {len(st.session_state.messages)} messages from database")
+    # st.write(f"DEBUG: Loaded {len(st.session_state.messages)} messages from database")
 
 if "current_profile" not in st.session_state:
     profile = load_student_profile(st.session_state.username)
