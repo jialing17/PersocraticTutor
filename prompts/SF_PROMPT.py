@@ -8,8 +8,8 @@ You are a Socratic Pedagogical Expert. Your goal is to select the most effective
 | mastery_level Range | Guidance: Yes | Guidance: No |
 | :--- | :--- | :--- |
 | **Low (< 0.3)** | **Micro-Scaffolding:** Smallest steps, analogies, fill-in-blanks etc. | **Direct Scaffolding:** Use Technical Terms; provide structure for the "how". |
-| **Mid (0.3 - 0.6)** | **Strategic Hints:** Use Technical Terms; provide nudges to connect variables. | **Guided Reflection:** Inquire on relationships between Technical Terms. |
-| **High (> 0.6)** | **Meta-Cognitive Support:** Identify where is the mental model gap | **Deep Reflection:** Abstract trade-offs, edge cases, 'What if?' using Formal Curriculum Theory. |
+| **Mid (0.3 - 0.65)** | **Strategic Hints:** Use Technical Terms; provide nudges to connect variables. | **Guided Reflection:** Inquire on relationships between Technical Terms. |
+| **High (> 0.65)** | **Meta-Cognitive Support:** Identify where is the mental model gap | **Deep Reflection:** Abstract trade-offs, edge cases, 'What if?' using Formal Curriculum Theory. |
 
 ### STYLE ADAPTATION RULES:
 1. If difficulty_category is 'Concept' -> 'Clarification' / 'Reasoning Probe'.
@@ -130,7 +130,7 @@ SF_FEW_SHOT_EXAMPLES = [
     # --- CONCEPT: MID MASTERY + NO GUIDANCE (Guided Reflection) ---
     {
         "role": "user", 
-        "content": "ANALYSIS: mastery_level: 0.60, Guidance: No, difficulty_category: Concept, Issue: 'Machine Learning - Inquiry (Student asking difference between Supervised and Unsupervised.)'"
+        "content": "ANALYSIS: mastery_level: 0.66, Guidance: No, difficulty_category: Concept, Issue: 'Machine Learning - Inquiry (Student asking difference between Supervised and Unsupervised.)'"
     },
     {
         "role": "assistant", 
@@ -217,9 +217,9 @@ SF_FEW_SHOT_EXAMPLES = [
         })
     },
     # --- CONCEPT: BREAKTHROUGH + BREAK ANALOGY ---
-    {
+   {
         "role": "user", 
-        "content": "Analyze: core_issue: 'Regression - Breakthrough (Student identified predicting a number)'. Mastery: 0.2"
+        "content": "ANALYSIS: mastery_level: 0.2, Guidance: No, difficulty_category: Procedure, Issue: 'Regression - Breakthrough (Student identified predicting a number)'"
     },
     {
         "role": "assistant", 
@@ -227,16 +227,17 @@ SF_FEW_SHOT_EXAMPLES = [
             "strategy_type": "Reasoning Probe",
             "instructional_style": "Direct Scaffolding",
             "strategy_steps": [
-                "Validate 'number' as Regression.",
-                "Define Continuous Variables.",
-                "Ask about Linear vs Non-linear fit."
+                "Validate 'number' as Regression using technical terms.",
+                "Define the structure of Continuous Variables.",
+                "Inquire about the difference between Linear and Non-linear fitting logic."
             ]
         })
     },
-    # --- CONCEPT: PERSISTENT CONFUSION + ANALOGY REPAIR ---
+
+    # --- CONCEPT: PERSISTENT CONFUSION (LOW MASTERY, YES GUIDANCE) ---
     {
         "role": "user", 
-        "content": "Analyze: core_issue: 'Regression - Confusion (Persistent: student insists thermometer gives a label)'. Mastery: 0.2. Guidance: Yes."
+        "content": "ANALYSIS: mastery_level: 0.2, Guidance: Yes, difficulty_category: Concept, Issue: 'Regression - Confusion (Persistent: student insists thermometer gives a label)'"
     },
     {
         "role": "assistant", 
@@ -244,17 +245,17 @@ SF_FEW_SHOT_EXAMPLES = [
             "strategy_type": "Reasoning Probe",
             "instructional_style": "Micro-Scaffolding",
             "strategy_steps": [
-                "Contrast 'Hot' label vs exact 38.5 value.",
-                "Ask how a doctor prescribes medicine based on 'Hot' alone.",
-                "Prompt if 38.5 is a name or a numerical value."
+                "Create a contrast between a 'Hot' label and the exact numerical 38.5 value.",
+                "Ask how a doctor's action changes based on 'Hot' vs. a specific degree.",
+                "Use a fill-in-the-blank prompt to identify if 38.5 is a category or a quantity."
             ]
         })
     },
 
-    # --- CONCEPT: TERMINOLOGY PIVOT (FORCE TECHNICAL LANGUAGE) ---
+    # --- CONCEPT: ANALOGY REPAIR (LOW MASTERY, YES GUIDANCE) ---
     {
         "role": "user", 
-        "content": "Analyze: core_issue: 'SVM Margin - Confusion (Persistent: student thinks road width is random and ignores points)'. Mastery: 0.25. Guidance: Yes."
+        "content": "ANALYSIS: mastery_level: 0.25, Guidance: Yes, difficulty_category: Concept, Issue: 'SVM Margin - Confusion (Persistent: student thinks road width is random and ignores points)'"
     },
     {
         "role": "assistant", 
