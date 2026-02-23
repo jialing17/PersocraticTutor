@@ -75,7 +75,7 @@ if st.sidebar.button("Logout"):
 st.title("Socratic PersonaTutor")
 
 for msg in st.session_state.messages:
-    if msg["role"] in ["tutor", "bot", "assistant"]:
+    if msg["role"] in ["assistant"]:
         role = "assistant"
     else:
         role = "user"

@@ -62,7 +62,7 @@ def get_chat_history(username):
     try:
         rows = resp["results"][0]["response"]["result"]["rows"]
         return [{"role": row[0]["value"], "content": row[1]["value"]} for row in rows]
-    except (KeyError, IndexError, TypeError):
+    except:
         return []
 
 def create_user(username, password):
