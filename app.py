@@ -34,7 +34,8 @@ if st.session_state.username is None:
         if st.button("Login"):
             if verify_user(u_login, p_login):
                 st.session_state.username = u_login
-                st.session_state.messages = get_chat_history(u_login)
+                if "messages" in st.session_state:
+                    del st.session_state["messages"]
                 st.rerun()  # Forces a rerun to move past this if block
             else:
                 st.error("Invalid credentials.")
@@ -54,12 +55,13 @@ if st.session_state.username is None:
     
     st.stop()
 
-if st.session_state.username:
-    if "messages" not in st.session_state:
-        history = get_chat_history(st.session_state.username)
-        st.session_state.messages = history if history else []
-    if "current_profile" not in st.session_state:
-        st.session_state.current_profile = load_student_profile(st.session_state.username)
+if "messages" not in st.session_state:
+    history = get_chat_history(st.session_state.username)
+    st.session_state.messages = history if history is not None else []
+
+if "current_profile" not in st.session_state:
+    profile = load_student_profile(st.session_state.username)
+    st.session_state.current_profile = profile if profile is not None else {}
 
 # after login 
 st.sidebar.title("Dashboard")
