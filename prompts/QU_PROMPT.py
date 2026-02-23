@@ -35,7 +35,7 @@ You MUST select exactly ONE of the following for the [Contextual Status]:
    - confused, frustrated, joy or neutral.
 
 3. SWITCH TOPIC:
-    - Yes: If the student input indicates a change of topic or if the core issue from recent context is resolved but the student is asking about something new.
+    - Yes: If the student input indicates a change of topic or the contextual status in core issue is inquiry or if the core issue from recent context is resolved but the student is asking about something new.
     - No: If the student input is a follow-up or clarification on the same core issue
 
 Return strictly in JSON format. Ensure all string values in the JSON are properly escaped. Do not use unescaped double quotes inside the text fields. Use single quotes if necessary (e.g., 'self').
