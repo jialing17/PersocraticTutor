@@ -110,10 +110,13 @@ class StudentModelingAgent:
         category = latest_analysis_json.get('difficulty_category', 'Concept')
         emotion = latest_analysis_json.get('emotion', 'neutral')    
 
+        if latest_analysis_json['switch_topic'] == "Yes":
+            old_mastery = 0.0
+
         if old_mastery == 0.0:
             # print("initializing mastery based on category...")
             baselines = {"Concept": 0.25, "Procedure": 0.40, "Next-step": 0.60}
-            old_mastery = baselines.get(category, 0.15)
+            old_mastery = baselines.get(category, 0.25)
 
         # print(f"\n[StudentModelingAgent] Old Mastery: {old_mastery}, guidance: {current_profile_json.get('need_more_guidance', 'Yes')}, emotion: {emotion}")
 
@@ -124,7 +127,7 @@ class StudentModelingAgent:
 
         Please output a JSON object with:
         1. "need_more_guidance": 'Yes' or 'No'.
-        2. "turn_performance": A float between -0.2 and 0.2.
+        2. "turn_performance": A float between -0.1 and 0.2.
         """
         messages.append({"role": "user", "content": user_prompt})
 

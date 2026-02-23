@@ -78,7 +78,7 @@ if st.sidebar.button("Logout"):
 st.title("Socratic PersonaTutor")
 
 if st.session_state.messages:
-    st.subheader("Chat History")
+    # st.subheader("Chat History")
     for msg in st.session_state.messages:
         role = msg.get("role", "user")
         with st.chat_message(role):

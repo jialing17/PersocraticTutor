@@ -17,7 +17,7 @@ You are a Student Modeling Agent. Your goal is to determine the student's curren
 2. CALCULATE turn_performance (based on your analysis on ISSUE): 
      - Breakthrough/Correct answer: 0.2
      - Partial progress/Minor step: 0.1
-     - Repeating error/Stuck: -0.1
+     - Repeating error/Stuck/Wrong answer: -0.1
 
 Return strictly in JSON format. Ensure all string values in the JSON are properly escaped. Do not use unescaped double quotes inside the text fields. Use single quotes if necessary (e.g., 'self').
 """

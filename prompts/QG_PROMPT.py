@@ -78,5 +78,56 @@ QG_FEW_SHOT_EXAMPLES = [
         "content": json.dumps({
             "tutor_response": "That is a great question to ask at this stage. Linear regression is fantastic for predicting things like house prices, where the answer can be any number. But if we are trying to decide if an email is Spam or Not Spam, what would a prediction of 0.5 actually represent? How might we change the model so the output is always a clear probability between zero and one?"
         })
+    },
+    # Example 4: Conceptual Breakthrough (Term Pivot)
+    {
+        "role": "user", 
+        "content": """
+        CORE_ISSUE: Support Vector Machines - Breakthrough (Student identified 'wide road' logic).
+        STRATEGY: instructional_style: 'Direct Scaffolding', strategy_steps: ['Acknowledge wide road', 'Introduce Margin', 'Ask about Soft Margin'].
+        REFERENCE_TEXT: 'The Margin is the distance between the decision boundary and the nearest data point. A Hard Margin allows no misclassifications, while a Soft Margin uses a C-parameter to permit some errors.'
+        """
+    },
+    {
+        "role": "assistant", 
+        "content": "Spot on. In Support Vector Machines, that gap you described, the wide road, is formally called the Margin. While a perfect separation is ideal, real-world data is often messy. How do you think our Margin needs to change if we want to allow a few 'mistakes' for the sake of a simpler boundary?"
+    },
+    # Example 5: Procedural Inquiry (Incremental Scaffolding)
+    {
+        "role": "user", 
+        "content": """
+        CORE_ISSUE: Python Loops - Inquiry (Student asking how to iterate through a dictionary).
+        STRATEGY: instructional_style: 'Micro-Scaffolding', strategy_steps: ['Use shopping list analogy', 'Ask about key-value pairs'].
+        REFERENCE_TEXT: 'To iterate over a dictionary, use .items() to retrieve both the key and the value in a for loop.'
+        """
+    },
+    {
+        "role": "assistant", 
+        "content": "Think of a dictionary like a labeled shopping list where every item has a specific price attached to it. If you wanted to go through the whole list and read out both the item and its price at the same time, what two pieces of information would you need to keep track of in each step of your loop?"
+    },
+    {
+        "role": "user", 
+        "content": """
+        CORE_ISSUE: Regression - Confusion (Student said 'I have no idea' regarding prediction types).
+        STRATEGY: instructional_style: 'Micro-Scaffolding', strategy_steps: ['Use thermometer analogy', 'Ask about number vs label'].
+        REFERENCE_TEXT: 'Regression is used for predicting continuous numerical values, whereas classification is for discrete labels.'
+        """
+    },
+    {
+        "role": "assistant", 
+        "content": "No worries! Let's think about a thermometer. When you check the temperature, are you getting a simple label like 'yes/no,' or are you looking at a specific value on a sliding scale of numbers?"
+    },
+    # Example 6: Conceptual Misconception (Analogy Pivot)
+    {
+    "role": "user", 
+    "content": """
+    CORE_ISSUE: Regression - Confusion (Student answered 'label' for the thermometer analogy).
+    STRATEGY: instructional_style: 'Micro-Scaffolding', strategy_steps: ['Clarify physical scale', 'Contrast 38.5 degrees vs "Hot" label'].
+    REFERENCE_TEXT: 'Regression deals with continuous data (numbers), while classification deals with categorical labels.'
+    """
+    },
+    {
+        "role": "assistant", 
+        "content": "That's interesting! If the thermometer just said 'Hot,' we wouldn't know if you had a slight fever or a dangerous one. When you look at the digital display and see exactly '38.5' or '39.2,' is that specific measurement a category name, or is it a point on a mathematical scale of numbers?"
     }
 ]
