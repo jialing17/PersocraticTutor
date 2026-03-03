@@ -185,11 +185,17 @@ class StrategyFormulationAgent:
         self.model = MODEL_NAME
         self.system_prompt = SF_SYSTEM_PROMPT
 
-    def formulate_strategy(self, analysis_result, student_state):
+    def formulate_strategy(self, analysis_result, student_state, current_analogy_count):
         messages = [{"role": "system", "content": self.system_prompt}]
         messages.extend(SF_FEW_SHOT_EXAMPLES)
-        
-        analysis_summary = f"mastery_level: {student_state['mastery_level']}, Guidance: {student_state['need_more_guidance']}, difficulty_category: {analysis_result['difficulty_category']}, Issue: '{analysis_result['core_issue']}'"
+
+        analysis_summary = (
+            f"mastery_level: {student_state['mastery_level']}, "
+            f"Guidance: {student_state['need_more_guidance']}, "
+            f"difficulty_category: {analysis_result['difficulty_category']}, "
+            f"analogy_count: {current_analogy_count}, "
+            f"Issue: '{analysis_result['core_issue']}'"
+        )
 
         user_prompt = f"ANALYSIS: {analysis_summary}"
         messages.append({"role": "user", "content": user_prompt})
@@ -202,8 +208,16 @@ class StrategyFormulationAgent:
                     response_format={"type": "json_object"},
                     timeout=30.0
                 )
-                return json.loads(response.choices[0].message.content)
-            
+
+                strategy_data = json.loads(response.choices[0].message.content)
+
+                increment = strategy_data.get('analogy_count_increment', 0)
+                print(f"\n Analogy Count Increment from Agent: {increment}")
+                current_analogy_count += increment
+                print(f"\n Updated Analogy Count: {current_analogy_count}")
+
+                return strategy_data, current_analogy_count
+                        
             except Exception as e:
                 if "500" in str(e) and attempt < 2:
                     print(f"  [Server Error] Agent 3 busy. Retrying in {5 * (attempt + 1)}s...")
@@ -212,10 +226,12 @@ class StrategyFormulationAgent:
                     print(f"API error: {e}")
                     # standard return on failure
                     return {
-                        "strategy_type": "Clarification",
-                        "instructional_style": "Strategic Hints",
-                        "strategy_steps": ["Ask the student to clarify their thought process."]
-                    }
+                    "strategy_type": "Clarification",
+                    "instructional_style": "Strategic Hints",
+                    "strategy_steps": ["Give hints on the issue."],
+                    "analogy_count_increment": 0,
+                    "closure_triggered": False
+                    }, current_analogy_count
 
 
 
@@ -275,11 +291,13 @@ class QuestionGenerationAgent:
             context = "No direct textbook reference found. Use general Socratic principles."
 
         strategy_type = strategy_json.get('strategy_type', 'Clarification')
-        strategy_steps = strategy_json.get('strategy_steps', [])
+        strategy_steps = strategy_json.get('strategy_steps', ["Give hints on the issue."])
         instructional_style = strategy_json.get('instructional_style', 'Strategic Hints')
+        closure_triggered = strategy_json.get('closure_triggered', False)
 
         user_content = f"""
         CORE_ISSUE: "{core_issue}"
+        CLOSURE_TRIGGERED: {closure_triggered}
         STRATEGY_TYPE: "{strategy_type}"
         INSTRUCTIONAL_STYLE: "{instructional_style}"
         STRATEGY_STEPS: {strategy_steps}
@@ -317,7 +335,8 @@ if __name__ == "__main__":
     # If no profile exists, use an empty dictionary or a default template
     current_profile = {
         "need_more_guidance": "Yes",
-        "mastery_level": 0.00
+        "mastery_level": 0.00,
+        "analogy_count": 0
     }
     
     # student_input = (
@@ -330,6 +349,9 @@ if __name__ == "__main__":
         if student_input.lower() in ["exit"]:
             break
         
+        current_analogy_count = current_profile.get('analogy_count', 0)
+        print(f"\nCurrent Analogy Count: {current_analogy_count}\n")
+
         print("Thinking...\n")
         # Step 1: Understanding (Uses Raw History)
         resultQU = qu_agent.analyze_student_input(student_input, history=current_history)
@@ -341,11 +363,18 @@ if __name__ == "__main__":
             latest_analysis_json=resultQU
         )
         print(f" SM Updated Profile: {updated_profile}")
+
+        if resultQU['switch_topic'] == "Yes":
+            current_analogy_count = 0 # reset analogy count on topic switch
         
         # Step 3: Strategy Formulation
-        strategy_result = sf_agent.formulate_strategy(resultQU, updated_profile)
+        strategy_result, updated_analogy_count = sf_agent.formulate_strategy(resultQU, updated_profile, current_analogy_count)
         print(f" SF Strategy: {strategy_result}")
 
+        updated_profile['analogy_count'] = updated_analogy_count
+        
+        print(f" Updated Profile: {updated_profile}")
+        
         # Step 4: Generation (The Socratic Response)
         final_response = qg_agent.generate_grounded_question(
             strategy_json=strategy_result, 
@@ -362,7 +391,7 @@ if __name__ == "__main__":
         current_profile = updated_profile
 
         # Output and Persistence
-        print(f"\nPersonaTutor: {final_response}\n")
+        print(f"\nPersocratic Tutor: {final_response}\n")
         
         # Save both tracks back to SQLite
         # update_database(student_id, current_history, current_profile)

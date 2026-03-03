@@ -90,19 +90,26 @@ if prompt := st.chat_input("Enter your question here..."):
     
     with st.spinner("Persocratic Tutor is thinking..."):
         try:
+            current_profile = st.session_state.current_profile
+            current_analogy_count = current_profile.get('analogy_count', 0)
+
             resultQU = qu_agent.analyze_student_input(prompt, history=st.session_state.messages)
             
-            old_profile = st.session_state.current_profile.copy()
             updated_profile = sm_agent.update_student_model(
-                current_profile_json=old_profile, 
+                current_profile_json=current_profile, 
                 latest_analysis_json=resultQU
             )
+
+            if resultQU.get('switch_topic') == "Yes":
+                current_analogy_count = 0
             
-            strategy_result = sf_agent.formulate_strategy(resultQU, updated_profile)
+            strategy_result, updated_analogy_count = sf_agent.formulate_strategy(resultQU, updated_profile, current_analogy_count)
+
+            updated_profile['analogy_count'] = updated_analogy_count
             
             final_response = qg_agent.generate_grounded_question(
                 strategy_result, 
-                resultQU.get('core_issue', 'General Concept') # fallback to a default category if core_issue is missing
+                resultQU.get('core_issue', 'Concept') # fallback to a default category if core_issue is missing
             )
 
             # save to database
